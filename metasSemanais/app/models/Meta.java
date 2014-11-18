@@ -34,6 +34,9 @@ public class Meta implements Comparable<Meta>{
 		int result = this.comparaSemana(o);
 		if(result == 0){
 			result = this.comparaPrioridade(o);
+			if(result == 0){
+				result = this.getCalendar().compareTo(o.getCalendar());
+			}
 		}
 		return result;
 	}
