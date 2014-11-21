@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Entity
 public class Meta implements Comparable<Meta>{
 	@Transient
-	public final int SEM_PRIORIDADE = 0;
+	public final boolean SEM_PRIORIDADE = false;
 	@Transient
-	public final int COM_PRIORIDADE = 1;
+	public final boolean COM_PRIORIDADE = true;
 	
 	@Id
 	@GeneratedValue
@@ -20,7 +20,7 @@ public class Meta implements Comparable<Meta>{
 	private int semana;
 	private String titulo;
 	private String descricao;
-	private int prioridade;
+	private boolean prioridade;
 	private boolean cumprida;
 	
 	@Temporal(TemporalType.DATE)
@@ -34,7 +34,7 @@ public class Meta implements Comparable<Meta>{
 		this.setPrazo();
 	}
 	
-	public Meta(String titulo, String descricao, int prioridade){
+	public Meta(String titulo, String descricao, boolean prioridade){
 		this.setNome(titulo);
 		this.setDescricao(descricao);
 		this.setPrioridade(prioridade);
@@ -75,16 +75,25 @@ public class Meta implements Comparable<Meta>{
 	}
 	
 	private int comparaPrioridade(Meta o){
-		return o.getPrioridade() - this.prioridade;
+		int result;
+		
+		if((this.prioridade == COM_PRIORIDADE && o.getPrioridade() == COM_PRIORIDADE) || 
+				(this.prioridade == SEM_PRIORIDADE && o.getPrioridade() == SEM_PRIORIDADE)){
+			result = 0;
+		}
+		else if(this.prioridade == COM_PRIORIDADE && o.getPrioridade() == SEM_PRIORIDADE){
+			result = 1;
+		}
+		else{
+			result = -1;
+		}
+		
+		return result;
 	}
 	
 	public Long getId() {
 		return id;
 	}
-
-	/*private void setId(Long id) {
-		this.id = id;
-	}*/
 
 	public String getNome() {
 		return titulo;
@@ -124,11 +133,11 @@ public class Meta implements Comparable<Meta>{
 		this.prazo.clear();
 	}
 
-	public int getPrioridade() {
+	public boolean getPrioridade() {
 		return prioridade;
 	}
 
-	public void setPrioridade(int prioridade) {
+	public void setPrioridade(boolean prioridade) {
 		this.prioridade = prioridade;
 	}
 

@@ -40,14 +40,20 @@ public class Application extends Controller {
 		
 		if(calendar.get(Calendar.WEEK_OF_YEAR) < semanaInicial || calendar.get(Calendar.WEEK_OF_YEAR) > semanaFinal){
 			Logger.warn("Valor inválido para a data.");
-			return index();
+			return redirect("/");
+			//return index();
 		}
 		
 		String titulo = requestData.get("titulo");
 		String descricao = requestData.get("descricao");
-		int prioridade = Integer.parseInt(requestData.get("prioridade"));
 		
-		Meta novaMeta = new Meta(titulo, descricao, prioridade);
+		boolean prior;
+		int prioridade = Integer.parseInt(requestData.get("prioridade"));
+		if(prioridade == 1)
+			prior = true;
+		else prior = false;
+		
+		Meta novaMeta = new Meta(titulo, descricao, prior);
 		novaMeta.setPrazo(calendar);
 		novaMeta.setSemana(verificaSemana(novaMeta.getCalendar()));
 		
@@ -57,7 +63,8 @@ public class Application extends Controller {
 		
 		Logger.info("Nova meta adicionada ao banco de dados.");
 		
-		return index();
+		return redirect("/");
+		//return index();
 	}
 	
 	@Transactional
@@ -67,7 +74,8 @@ public class Application extends Controller {
 		
 		Logger.info("Meta removida com sucesso.");
 		
-		return index();
+		return redirect("/");
+		//return index();
 	}
 
 	@Transactional
@@ -81,7 +89,8 @@ public class Application extends Controller {
 		
 		Logger.info("Meta atualizada.");
 		
-		return index();
+		return redirect("/");
+		//return index();
 	}
 	
 	@Transactional
