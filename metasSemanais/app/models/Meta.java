@@ -3,26 +3,43 @@ package models;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.persistence.*;
+
+
+@Entity
 public class Meta implements Comparable<Meta>{
+	@Transient
 	public final int SEM_PRIORIDADE = 0;
+	@Transient
 	public final int COM_PRIORIDADE = 1;
-		
-	private int id;
-	private String nome;
-	private String descricao;
-	private Calendar prazo;
-	private int prioridade;
 	
-	public Meta(String nome, String descricao){
-		this.setNome(nome);
+	@Id
+	@GeneratedValue
+	private Long id;
+	
+	private int semana;
+	private String titulo;
+	private String descricao;
+	private int prioridade;
+	private boolean cumprida;
+	
+	@Temporal(TemporalType.DATE)
+	private Calendar prazo;
+	
+	public Meta(String titulo, String descricao){
+		this.setNome(titulo);
 		this.setDescricao(descricao);
 		this.setPrioridade(SEM_PRIORIDADE);
+		this.setCumprida(false);
+		this.setPrazo();
 	}
 	
-	public Meta(String nome, String descricao, int prioridade){
-		this.setNome(nome);
+	public Meta(String titulo, String descricao, int prioridade){
+		this.setNome(titulo);
 		this.setDescricao(descricao);
 		this.setPrioridade(prioridade);
+		this.setCumprida(false);
+		this.setPrazo();
 	}
 	
 	public Meta(){
@@ -58,35 +75,23 @@ public class Meta implements Comparable<Meta>{
 	}
 	
 	private int comparaPrioridade(Meta o){
-		int result;
-		
-		if(this.prioridade == COM_PRIORIDADE && o.getPrioridade() == COM_PRIORIDADE){
-			result = 0;
-		}
-		else if(this.prioridade == COM_PRIORIDADE && o.getPrioridade() == SEM_PRIORIDADE){
-			result = 1;
-		}
-		else{
-			result = -1;
-		}
-		
-		return result;
+		return o.getPrioridade() - this.prioridade;
 	}
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	/*private void setId(Long id) {
 		this.id = id;
-	}
+	}*/
 
 	public String getNome() {
-		return nome;
+		return titulo;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.titulo = nome;
 	}
 
 	public String getDescricao() {
@@ -101,13 +106,22 @@ public class Meta implements Comparable<Meta>{
 		return "" + prazo.get(Calendar.DAY_OF_MONTH) + "/" + (prazo.get(Calendar.MONTH)+1) + "/" + prazo.get(Calendar.YEAR);
 	}
 	
-	private Calendar getCalendar(){
+	public Calendar getCalendar(){
 		return prazo;
 	}
 
 	public void setPrazo(int dia, int mes, int ano) {
 		this.prazo = new GregorianCalendar(ano, mes-1, dia);
 		this.prazo.setFirstDayOfWeek(Calendar.SUNDAY);
+	}
+	
+	public void setPrazo(Calendar calendar){
+		this.prazo = calendar;
+	}
+	
+	public void setPrazo(){
+		this.prazo = new GregorianCalendar();
+		this.prazo.clear();
 	}
 
 	public int getPrioridade() {
@@ -116,5 +130,21 @@ public class Meta implements Comparable<Meta>{
 
 	public void setPrioridade(int prioridade) {
 		this.prioridade = prioridade;
+	}
+
+	public boolean isCumprida() {
+		return cumprida;
+	}
+
+	public void setCumprida(boolean cumpriu) {
+		this.cumprida = cumpriu;
+	}
+
+	public int getSemana() {
+		return semana;
+	}
+
+	public void setSemana(int semana) {
+		this.semana = semana;
 	}
 }

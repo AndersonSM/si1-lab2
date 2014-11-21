@@ -1,7 +1,102 @@
-@(message: String)
+@(metas: List[Meta])(contMetasSemana: Array[Int])(contMetasCumpridas: Int)(contMetasNaoCumpridas: Int)
 
-@main("Welcome to Play2") {
+<!DOCTYPE html>
 
-    @play20.welcome(message, style = "Java2")
+<html>
+<head lang="pt">
+	<meta charset="utf-8">
+    <title>Metas semanais</title>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>        
+</head>
+<body>
+	<br>
+	<div class="container">
+		<div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h3 class="panel-title">Metas:
+                            </div>
+                        </div>
+                    </div>
+                    @if(!metas.isEmpty()){
+                    <ul class="list-group" id="metas">
+                        @for(meta <- metas){
+							@if(!meta.isCumprida()){
+                        		<li class="list-group-item"><p>Nome: @meta.getNome() - Prazo: @meta.getPrazo() - 
+                        		Prioridade: @meta.getPrioridade() - Cumpriu: @meta.isCumprida() - Semana: @meta.getSemana()</p>
+							}else{
+								<li class="list-group-item"><p>Nome: @meta.getNome() - Prazo: @meta.getPrazo() - Prioridade: @meta.getPrioridade()
+							- Cumpriu: @meta.isCumprida() - Semana: @meta.getSemana()</p> <h3>AEEEE \OOO/</h3>
+							}
+							<form action="@routes.Application.removeMeta(meta.getId())" method="post">
+								<button type="submit" class="close">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            	</button>
+							</form>
+							<form action="@routes.Application.updateMeta(meta.getId())" method="post">
+								<input type="submit" value="Atualizar" class="btn btn-primary">
+							</form>
+						</li>
+						}
+                    </ul>
+                    } else {
+                    	<p>Nenhuma meta adicionada.</p>
+					}
+                </div>
+            </div>
+		</div>
 
-}
+	<div class="row">
+		<p>Semana 1:@contMetasSemana(0)</p>
+		<p>Semana 2:@contMetasSemana(1)</p>
+		<p>Semana 3:@contMetasSemana(2)</p>
+		<p>Semana 4:@contMetasSemana(3)</p>
+		<p>Semana 5:@contMetasSemana(4)</p>
+		<p>Semana 6:@contMetasSemana(5)</p>
+		<p>Metas cumpridas: @contMetasCumpridas</p>
+		<p>Metas não cumpridas: @contMetasNaoCumpridas</p>
+		<p>Total de metas: @metas.length</p>
+	</div>
+	
+	<div class="row panel panel-default panel-body">
+		<form method="post" action="/meta/add">
+		<div class="row">
+			<div class="col-md-12">
+	           	<div class="col-md-6">
+					<label>Adicionar nova meta:</label>
+	                <input type="text" class="form-control" name="titulo" required>
+	            </div>
+				<div class="col-md-6">
+					<label>Prioridade:</label>
+					<div class="radio">
+	            		<label><input type="radio" name="prioridade" value="1" checked> Sim</label><br>
+	                	<label><input type="radio" name="prioridade" value="0"> Não</label>
+	            	</div>
+	           	</div>
+			</div>
+		</div>
+		<div class="row">
+	        <div class="col-md-12">
+	            <div class="col-md-6">
+					<label for="descricao">Descrição: </label>
+					<input type="text" class="form-control" name="descricao"><br>
+	            </div>
+				<div class="col-md-6">
+		            <label for="prazo">Prazo: </label><br>
+					<input type="date" name="prazo" min="2014-11-20" max="2014-12-27" required>
+					<input type="submit" class="btn btn-primary" value="Adicionar">
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+</body>
+</html>
+
+
