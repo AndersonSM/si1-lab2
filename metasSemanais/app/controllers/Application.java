@@ -41,7 +41,6 @@ public class Application extends Controller {
 		if(calendar.get(Calendar.WEEK_OF_YEAR) < semanaInicial || calendar.get(Calendar.WEEK_OF_YEAR) > semanaFinal){
 			Logger.warn("Valor inválido para a data.");
 			return redirect("/");
-			//return index();
 		}
 		
 		String titulo = requestData.get("titulo");
@@ -90,7 +89,6 @@ public class Application extends Controller {
 		Logger.info("Meta atualizada.");
 		
 		return redirect("/");
-		//return index();
 	}
 	
 	@Transactional
@@ -136,9 +134,7 @@ public class Application extends Controller {
 	}
 	
 	private static int verificaSemana(Calendar metaCalendar){
-		Calendar atual = new GregorianCalendar();
-		atual.setFirstDayOfWeek(Calendar.SUNDAY);
-		return metaCalendar.get(Calendar.WEEK_OF_YEAR)-atual.get(Calendar.WEEK_OF_YEAR)+1;
+		return (metaCalendar.get(Calendar.WEEK_OF_YEAR)-semanaInicial)+1;
 	}
 	
 	public static GenericDAO getDAO(){

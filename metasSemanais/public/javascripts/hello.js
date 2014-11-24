@@ -1,3 +1,5 @@
-if (window.console) {
-  console.log("Welcome to your Play application's JavaScript!");
-}
+$(document).ready(function(){
+	$(".atrib").click(function(){
+		$("#desc"+this.id.substring(4)).toggle("slow");
+    });	
+});

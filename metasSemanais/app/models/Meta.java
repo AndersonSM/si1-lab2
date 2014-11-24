@@ -51,23 +51,23 @@ public class Meta implements Comparable<Meta>{
 		int result = this.comparaSemana(o);
 		if(result == 0){
 			result = this.comparaPrioridade(o);
-			if(result == 0){
+			if(result == 0)
 				result = this.getCalendar().compareTo(o.getCalendar());
-			}
 		}
+
 		return result;
 	}
 
 	private int comparaSemana(Meta o){
-		int result;
+		int result = 0;
 		
-		if(this.getCalendar().get(Calendar.WEEK_OF_YEAR) == o.getCalendar().get(Calendar.WEEK_OF_YEAR)){
+		if(this.getSemana() == o.getSemana()){
 			result = 0;
 		}
-		else if(this.getCalendar().get(Calendar.WEEK_OF_YEAR) > o.getCalendar().get(Calendar.WEEK_OF_YEAR)){
+		else if(this.getSemana() > o.getSemana()){
 			result = 1;
 		}
-		else{
+		else if(this.getSemana() < o.getSemana()){
 			result = -1;
 		}
 		
@@ -82,10 +82,10 @@ public class Meta implements Comparable<Meta>{
 			result = 0;
 		}
 		else if(this.prioridade == COM_PRIORIDADE && o.getPrioridade() == SEM_PRIORIDADE){
-			result = 1;
+			result = -1;
 		}
 		else{
-			result = -1;
+			result = 1;
 		}
 		
 		return result;
