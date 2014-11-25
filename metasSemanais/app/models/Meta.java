@@ -58,7 +58,7 @@ public class Meta implements Comparable<Meta>{
 		return result;
 	}
 
-	private int comparaSemana(Meta o){
+	public int comparaSemana(Meta o){
 		int result = 0;
 		
 		if(this.getSemana() == o.getSemana()){
@@ -74,7 +74,7 @@ public class Meta implements Comparable<Meta>{
 		return result;
 	}
 	
-	private int comparaPrioridade(Meta o){
+	public int comparaPrioridade(Meta o){
 		int result;
 		
 		if((this.prioridade == COM_PRIORIDADE && o.getPrioridade() == COM_PRIORIDADE) || 
