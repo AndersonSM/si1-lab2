@@ -1,5 +1,6 @@
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import models.Meta;
 import models.dao.GenericDAO;
@@ -125,6 +126,21 @@ public class Global extends GlobalSettings {
 			}
 		});
 	}
+	
+	@Override
+	public void onStop(Application app){
+	    JPA.withTransaction(new play.libs.F.Callback0() {
+	    @Override
+	    public void invoke() throws Throwable {
+	        Logger.info("Aplicação finalizando...");
+	        List<Meta> metas = dao.findAllByClassName("Meta");
+
+	        for (Meta meta : metas) {
+	        dao.removeById(Meta.class, meta.getId());
+	       } 
+	    }}); 
+	}
+
 	
 	private static int verificaSemana(Calendar metaCalendar){
 		int SEMANA_INICIAL = 47;
