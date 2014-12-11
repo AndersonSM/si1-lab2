@@ -23,7 +23,6 @@ public class Application extends Controller {
 	@Transactional
     public static Result index() {
 		getMetasFromDB();
-		updateContadores();
 		return ok(index.render(metas, contMetasSemana, contMetasCumpridas, contMetasNaoCumpridas));
     }
 	
@@ -62,6 +61,8 @@ public class Application extends Controller {
 		
 		Logger.info("Nova meta adicionada ao banco de dados.");
 		
+		updateContadores();
+		
 		return redirect("/");
 		//return index();
 	}
@@ -72,6 +73,8 @@ public class Application extends Controller {
 		getDAO().flush();
 		
 		Logger.info("Meta removida com sucesso.");
+		
+		updateContadores();
 		
 		return redirect("/");
 		//return index();
@@ -88,6 +91,8 @@ public class Application extends Controller {
 		
 		Logger.info("Meta atualizada.");
 		
+		updateContadores();
+		
 		return redirect("/");
 	}
 	
@@ -98,7 +103,9 @@ public class Application extends Controller {
 		Collections.sort(metas);
 	}
 
-	private static void updateContadores(){
+	public static void updateContadores(){
+		getMetasFromDB();
+		
 		contMetasCumpridas = 0;
 		contMetasNaoCumpridas = 0;
 		contMetasSemana = new int[6];
@@ -141,4 +148,33 @@ public class Application extends Controller {
 		return dao;
 	}
 
+	public static List<Meta> getMetas(){
+		return metas;
+	}
+
+	public static int[] getContMetasSemana() {
+		return contMetasSemana;
+	}
+
+	public static int getContMetasCumpridas() {
+		return contMetasCumpridas;
+	}
+
+	public static int getContMetasNaoCumpridas() {
+		return contMetasNaoCumpridas;
+	}
+
+	public static void setContMetasSemana(int[] contMetasSemana) {
+		Application.contMetasSemana = contMetasSemana;
+	}
+
+	public static void setContMetasCumpridas(int contMetasCumpridas) {
+		Application.contMetasCumpridas = contMetasCumpridas;
+	}
+
+	public static void setContMetasNaoCumpridas(int contMetasNaoCumpridas) {
+		Application.contMetasNaoCumpridas = contMetasNaoCumpridas;
+	}
+	
+	
 }
